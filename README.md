@@ -1,151 +1,132 @@
 # Infrações Disciplinares – IFPI
 
-Sistema de modelagem para **gestão de infrações disciplinares** em uma instituição de ensino, desenvolvido com base em **Programação Orientada a Objetos** e **modelagem UML**, com foco no controle de ocorrências, penalidades e notificações.
-
----
-
 ## 1. Visão Geral
 
-Este projeto apresenta um **modelo de classes** voltado para a gestão de infrações disciplinares no âmbito educacional. O sistema permite o **registro de ocorrências por professores**, o **acompanhamento por responsáveis**, a **aplicação de penalidades** e o **envio de notificações** aos envolvidos.
+Este projeto apresenta um **modelo de classes UML** desenvolvido para representar o processo de **gestão de ocorrências disciplinares em um ambiente educacional**. O sistema foi modelado com base nos princípios da **Programação Orientada a Objetos**, utilizando conceitos como **herança (generalização)**, **associações** e **cardinalidades**, garantindo uma estrutura clara, coesa e alinhada ao domínio do problema.
 
-A modelagem utiliza conceitos fundamentais de **Orientação a Objetos**, como **herança (generalização)**, **associações** e **multiplicidades**, promovendo reutilização de código, organização e clareza no fluxo do sistema. A classe `Usuario` atua como superclasse, representando os diferentes perfis de acesso, enquanto classes especializadas implementam responsabilidades específicas.
+O fluxo principal do sistema envolve o **Professor registrando uma ocorrência**, o **Coordenador validando a ocorrência e aplicando penalidades**, e o **Aluno e seu Responsável acompanhando todo o processo por meio de notificações**. A estrutura acadêmica, composta por cursos, turmas e disciplinas, contextualiza as ocorrências dentro do ambiente escolar.
+
+O modelo é adequado para fins acadêmicos e profissionais, podendo ser facilmente convertido para **modelo relacional**, **scripts SQL** ou implementações em linguagens orientadas a objetos.
 
 ---
 
 ## 2. Diagrama de Classes
 
-O diagrama de classes representa visualmente as entidades do sistema, seus atributos, métodos e relacionamentos, evidenciando:
-
-- A **generalização** entre `Usuario`, `Aluno`, `Professor` e `Responsavel`;
-- As associações entre **Ocorrência**, **Penalidade** e **Notificação**;
-- A estrutura acadêmica composta por **Curso**, **Turma** e **Disciplina**;
-- As **multiplicidades**, que definem as regras de cardinalidade entre as classes.
-
-O diagrama serve como base para o desenvolvimento do sistema e para a posterior implementação do banco de dados.
+O diagrama de classes representa visualmente as entidades do sistema, seus atributos, métodos e relacionamentos. A classe `Usuario` atua como superclasse, concentrando características comuns, enquanto as subclasses especializam os diferentes papéis desempenhados no sistema. As demais classes representam a estrutura acadêmica e o processo disciplinar.
 
 ---
 
 ## 3. Catálogo de Classes
 
-A seguir, apresenta-se a descrição das classes identificadas no diagrama, bem como suas responsabilidades e principais atributos.
+A seguir, apresenta-se a descrição das classes do sistema, suas responsabilidades e principais atributos.
 
 | Classe | Descrição | Atributos Principais |
 |------|---------|--------------------|
-| Usuario | Superclasse que representa qualquer usuário do sistema e realiza autenticação. | id_usuario, nome, email, senha |
-| Aluno | Subclasse de Usuario. Representa o estudante envolvido em ocorrências e penalidades. | matricula |
-| Professor | Subclasse de Usuario. Responsável por registrar ocorrências disciplinares. | — |
-| Responsavel | Subclasse de Usuario. Responsável por acompanhar as ocorrências do aluno. | — |
-| Curso | Representa um curso oferecido pela instituição. | id_curso, nome |
-| Turma | Representa uma turma vinculada a um curso e a uma disciplina. | id_turma, nome, id_disciplina |
-| Disciplina | Representa uma disciplina acadêmica. | id_disciplina, nome, codigo |
-| Ocorrencia | Representa uma infração disciplinar registrada no sistema. | id_ocorrencia, tipo, descricao, data, status |
-| Penalidade | Representa a sanção aplicada a uma ocorrência. | id_penalidade, tipo, duracao_dias, data_aplicacao |
-| Notificacao | Representa mensagens enviadas aos usuários do sistema. | id_notificacao, mensagem, canal, data_envio, status |
+| Usuario | Superclasse que representa qualquer usuário que interage com o sistema, centralizando autenticação e dados básicos. | id_usuario, nome, email, senha |
+| Aluno | Subclasse de Usuario. Representa o estudante vinculado a uma turma e sujeito a ocorrências e penalidades. | matricula |
+| Professor | Subclasse de Usuario. Responsável pelo registro de ocorrências disciplinares. | — |
+| Coordenador | Subclasse de Usuario. Responsável por validar ocorrências e aplicar penalidades. | — |
+| Responsavel | Subclasse de Usuario. Representa o responsável legal pelo aluno e acompanha o histórico disciplinar. | — |
+| Curso | Representa um curso oferecido pela instituição de ensino. | id_curso, nome |
+| Turma | Representa uma turma associada a um curso e a um ano letivo. | id_turma, nome, ano_letivo |
+| Disciplina | Representa uma disciplina ministrada em uma turma. | id_disciplina, nome, codigo |
+| Ocorrencia | Representa um registro disciplinar associado a um aluno em determinado contexto acadêmico. | id_ocorrencia, tipo, descricao, data, status |
+| Penalidade | Representa a penalidade aplicada a uma ocorrência após validação. | id_penalidade, tipo, duracao_dias, data_aplicacao, status |
+| Notificacao | Representa as notificações enviadas aos alunos e responsáveis. | id_notificacao, mensagem, canal, data_envio, status |
 
 ---
 
 ## 4. Dicionário de Dados
 
-Esta seção descreve os atributos de cada classe, seus tipos de dados, finalidades e regras de negócio.
+Esta seção detalha os atributos de cada classe, seus tipos de dados, descrições e regras de negócio.
 
-### 4.1 Usuario
-
-| Atributo | Tipo | Descrição | Regras / Restrições |
-|--------|----|---------|--------------------|
-| id_usuario | Inteiro | Identificador único do usuário. | Chave primária |
-| nome | String(100) | Nome completo do usuário. | Obrigatório |
-| email | String(100) | Email para login e notificações. | Obrigatório, único |
-| senha | String(255) | Senha de autenticação. | Obrigatório |
-
----
-
-### 4.2 Aluno
+### Classe: Usuario
 
 | Atributo | Tipo | Descrição | Regras / Restrições |
-|--------|----|---------|--------------------|
-| matricula | String(50) | Matrícula institucional do aluno. | Obrigatório, único |
+|--------|----|---------|------------------|
+| id_usuario | int | Identificador único do usuário no sistema. | Chave primária |
+| nome | String | Nome completo do usuário. | Obrigatório |
+| email | String | Email utilizado para autenticação e notificações. | Obrigatório, Único |
+| senha | String | Senha de acesso ao sistema. | Obrigatório |
 
 ---
 
-### 4.3 Professor
-
-Classe especializada de `Usuario`, responsável pelo **registro de ocorrências disciplinares** no sistema. Não possui atributos próprios além dos herdados.
-
----
-
-### 4.4 Responsavel
-
-Classe especializada de `Usuario`, responsável por **acompanhar ocorrências** e receber notificações relacionadas ao aluno.
-
----
-
-### 4.5 Curso
+### Classe: Aluno
 
 | Atributo | Tipo | Descrição | Regras / Restrições |
-|--------|----|---------|--------------------|
-| id_curso | Inteiro | Identificador do curso. | Chave primária |
-| nome | String(100) | Nome do curso. | Obrigatório |
+|--------|----|---------|------------------|
+| matricula | String | Identificador acadêmico único do aluno. | Obrigatório, Único |
 
 ---
 
-### 4.6 Turma
+### Classe: Curso
 
 | Atributo | Tipo | Descrição | Regras / Restrições |
-|--------|----|---------|--------------------|
-| id_turma | Inteiro | Identificador da turma. | Chave primária |
-| nome | String(50) | Nome ou código da turma. | Obrigatório |
-| id_disciplina | Inteiro | Referência à disciplina. | Chave estrangeira |
+|--------|----|---------|------------------|
+| id_curso | int | Identificador único do curso. | Chave primária |
+| nome | String | Nome do curso. | Obrigatório |
 
 ---
 
-### 4.7 Disciplina
+### Classe: Turma
 
 | Atributo | Tipo | Descrição | Regras / Restrições |
-|--------|----|---------|--------------------|
-| id_disciplina | Inteiro | Identificador da disciplina. | Chave primária |
-| nome | String(100) | Nome da disciplina. | Obrigatório |
-| codigo | String(20) | Código institucional da disciplina. | Obrigatório, único |
+|--------|----|---------|------------------|
+| id_turma | int | Identificador único da turma. | Chave primária |
+| nome | String | Nome ou código da turma. | Obrigatório |
+| ano_letivo | int | Ano letivo da turma. | Obrigatório |
 
 ---
 
-### 4.8 Ocorrencia
+### Classe: Disciplina
 
 | Atributo | Tipo | Descrição | Regras / Restrições |
-|--------|----|---------|--------------------|
-| id_ocorrencia | Inteiro | Identificador da ocorrência. | Chave primária |
-| tipo | String(50) | Tipo da infração. | Obrigatório |
-| descricao | String(255) | Descrição da ocorrência. | Obrigatório |
-| data | Date | Data do registro. | Obrigatório |
-| status | String(30) | Situação da ocorrência. | Obrigatório |
+|--------|----|---------|------------------|
+| id_disciplina | int | Identificador único da disciplina. | Chave primária |
+| nome | String | Nome da disciplina. | Obrigatório |
+| codigo | String | Código interno da disciplina. | Obrigatório, Único |
 
 ---
 
-### 4.9 Penalidade
+### Classe: Ocorrencia
 
 | Atributo | Tipo | Descrição | Regras / Restrições |
-|--------|----|---------|--------------------|
-| id_penalidade | Inteiro | Identificador da penalidade. | Chave primária |
-| tipo | String(50) | Tipo de penalidade. | Obrigatório |
-| duracao_dias | Inteiro | Duração da penalidade em dias. | Maior que zero |
-| data_aplicacao | Date | Data de aplicação. | Obrigatório |
+|--------|----|---------|------------------|
+| id_ocorrencia | int | Identificador único da ocorrência. | Chave primária |
+| tipo | String | Tipo da ocorrência registrada. | Obrigatório |
+| descricao | String | Descrição detalhada da ocorrência. | Obrigatório |
+| data | Date | Data do registro da ocorrência. | Obrigatório |
+| status | String | Situação atual da ocorrência. | Obrigatório |
 
 ---
 
-### 4.10 Notificacao
+### Classe: Penalidade
 
 | Atributo | Tipo | Descrição | Regras / Restrições |
-|--------|----|---------|--------------------|
-| id_notificacao | Inteiro | Identificador da notificação. | Chave primária |
-| mensagem | String(255) | Conteúdo da notificação. | Obrigatório |
-| canal | String(50) | Meio de envio. | Obrigatório |
-| data_envio | Date | Data do envio. | Obrigatório |
-| status | String(30) | Situação da notificação. | Obrigatório |
+|--------|----|---------|------------------|
+| id_penalidade | int | Identificador único da penalidade. | Chave primária |
+| tipo | String | Tipo da penalidade aplicada. | Obrigatório |
+| duracao_dias | int | Duração da penalidade em dias. | Opcional |
+| data_aplicacao | Date | Data da aplicação da penalidade. | Obrigatório |
+| status | String | Situação atual da penalidade. | Obrigatório |
+
+---
+
+### Classe: Notificacao
+
+| Atributo | Tipo | Descrição | Regras / Restrições |
+|--------|----|---------|------------------|
+| id_notificacao | int | Identificador único da notificação. | Chave primária |
+| mensagem | String | Conteúdo da notificação enviada. | Obrigatório |
+| canal | String | Meio de envio da notificação (email, sistema, etc.). | Obrigatório |
+| data_envio | Date | Data de envio da notificação. | Obrigatório |
+| status | String | Status da notificação. | Obrigatório |
 
 ---
 
 ## 5. Considerações Finais
 
-Este modelo fornece uma base sólida para a implementação de um sistema de controle de infrações disciplinares, podendo ser facilmente expandido para incluir regras adicionais, integração com banco de dados relacional e desenvolvimento de interfaces de usuário.
+O modelo de classes apresentado atende aos critérios de **organização, clareza, coerência conceitual e boas práticas de modelagem UML**, estando adequado para avaliações acadêmicas e para implementação em sistemas reais. A separação clara de responsabilidades entre as classes facilita a manutenção, evolução e integração do sistema com diferentes tecnologias.
 
 ---
 
